@@ -1,0 +1,109 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content_checkout %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card border-0 rounded-3 shadow-sm p-3" id="form-wrapper">
+                <form id="form">
+                    <div id="user-info">
+                        <h4>Thông tin người dùng</h4>
+                        {% if user_info %}
+                        <div class="mb-3">
+                            <input required class="form-control" type="text" name="name" placeholder="Họ tên" value="{{ user_info.name }}">
+                        </div>
+                        <div class="mb-3">
+                            <input required class="form-control" type="email" name="email" placeholder="Email.." value="{{ user_info.email }}">
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div id="shipping-info">
+                        <hr>
+                        <h4>Thông tin thanh toán</h4>
+                        <div class="mb-3">
+                            <input class="form-control" type="text" name="address" placeholder="Số nhà">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="text" name="city" placeholder="Quận/Xã">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="text" name="state" placeholder="Tỉnh/Thành phố">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="text" name="zipcode" placeholder="Số điện thoại">
+                        </div>
+                        <div class="mb-3">
+                            <input class="form-control" type="text" name="country" placeholder="Mã giảm giá">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <!-- Thêm hình ảnh mã QR code ngân hàng chuyển khoản -->
+                        <img src="{% static 'app/images/ma_qr_momo.jpg' %}" alt="Mã QR Code Ngân hàng" class="img-fluid" style="width: 500px; height: 500px;" >
+                    </div>
+                    {% comment %} <p>Xin quý khách hàng vui lòng đặt cọc trước 40% hóa đơn.</p> {% endcomment %}
+                    <div class="alert" role="alert">
+                        <p class="mb-1">
+                            <span style="color: red; font-weight: bold;">Xin quý khách hàng vui lòng đặt cọc trước 40% hóa đơn.</span>
+                        </p>
+                        <p class="mb-1">
+                            Quý khách vui lòng thanh toán và chụp lại hóa đơn trên màn hình máy tính, mã giao dịch rồi gửi qua :
+                            <br>
+                            <a href="https://www.facebook.com/haongtandung" class="text-white mt-2" target="_blank" style="color: #1877F2;">
+                                <i class="fab fa-facebook-f" style="color: #1877F2;"></i> <span style="color: #1877F2; font-weight: bold;">Liên hệ qua Facebook</span>
+                            </a>
+                            <br>
+                            (<span style="color: #1877F2; font-weight: bold;">Hoàng Dũng</span>)
+                            <br>
+                            để được xác nhận đơn hàng.
+                        </p>
+                    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+
+                    <hr>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Tiếp tục">
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 rounded-3 shadow-sm p-3">
+                <a class="btn btn-outline-dark mb-3" href="{% url 'cart' %}">&#x2190; Quay lại Giỏ hàng</a>
+                <hr>
+                <h3>Danh sách giỏ hàng</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Hình ảnh</th>
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Giá cả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+							<tr>
+								<td><a href="{% url 'detail' %}?id={{ item.product.id }}"><img class="row-image" src="{{ item.product.ImageURL }}" width="70" height="70"></a></td>
+								<td><a href="{% url 'detail' %}?id={{ item.product.id }}" style="text-decoration: none; color: black;">{{ item.product.name }}</a></td>
+								<td>{{ item.quantity }}</td>
+								<td>${{ item.get_total }}</td>
+							</tr>
+						{% endfor %}
+                    </tbody>
+                </table>
+                <h5 class="mt-3">Tổng số sản phẩm: {{ order.get_cart_items }}</h5>
+                <h5 class="mb-0">Tổng cộng tiền: ${{ order.get_cart_total | floatformat:2 }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content_checkout %}
